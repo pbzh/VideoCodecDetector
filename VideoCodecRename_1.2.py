@@ -20,8 +20,7 @@ import tkinter as tk
 import os
 from codec_common import probe_file, VIDEO_CODECS, VIDEO_CODEC_COUNTS_TEMPLATE, VIDEO_EXTENSIONS
 import datetime
-from os import re
-from pathlib import Pathname
+from os import rename
 import re
 from pathlib import Path
 
