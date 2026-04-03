@@ -25,10 +25,7 @@ from tkinter import filedialog, messagebox, ttk
 # ── Constants ──────────────────────────────────────────────────────────────────
 VERSION = "2.1.0"
 
-VIDEO_EXTENSIONS = frozenset({
-    ".mov", ".mp4", ".mkv", ".avi", ".m4v", ".mpg", ".mpeg",
-    ".m2ts", ".mts", ".ts", ".wmv", ".flv", ".webm", ".3gp", ".f4v",
-})
+from codec_common import VIDEO_EXTENSIONS, probe_file, ffprobe_available
 
 CODEC_COLORS: dict[str, str] = {
     "h264":       "#2ecc71",
@@ -75,23 +72,7 @@ def format_duration(seconds: float | None) -> str:
     return f"{h:02d}:{m:02d}:{s:02d}" if h else f"{m:02d}:{s:02d}"
 
 
-def probe_file(path: Path) -> dict:
-    cmd = [
-        "ffprobe", "-v", "quiet",
-        "-print_format", "json",
-        "-show_streams", "-show_format",
-        str(path),
-    ]
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-    return json.loads(result.stdout)
-
-
-def ffprobe_available() -> bool:
-    try:
-        subprocess.run(["ffprobe", "-version"], capture_output=True, timeout=5)
-        return True
-    except (FileNotFoundError, subprocess.TimeoutExpired):
-        return False
+from codec_common import probe_file, ffprobe_available
 
 
 # ── Data model ─────────────────────────────────────────────────────────────────
